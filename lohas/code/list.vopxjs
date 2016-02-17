@@ -1,0 +1,112 @@
+{
+	onReady:function(){
+		pageClass.superclass.onReady.call(this);
+		var _this = this;
+		window.GridQuery = this;
+		window.customListPage  = this;
+		window.EvalProjectQuery = {
+			trackFlow: _this.trackFlow
+		}
+	},
+	//加入帮助按钮
+	getButtonData:function() {
+		return "[{text:'帮助',style:'help',click:'window.customListPage.help()'}]";
+	},
+	help:function(id) {
+		 　window.open ( ctx+'/view/help/cspems_help.html#_Toc418841417', '效重点评价结果', 'height=window.screen.heigh, width=window.screen.width, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no'); 
+		
+	}
+	,
+	showFlowDiagFormat:function(value, row, index) {
+		var instanceid  = null;
+		if(row.processInstanceId){
+			instanceid = row.processInstanceId;
+		}
+			
+		if(instanceid) {
+			return "<div style='text-align:center;height:auto;'><a href='${ctx}/workflow/diagram/processInstance/keyProject/"+instanceid
+				+".do' target='_blank' style='width:40px;' class='c_icon-query' title='查看流程图'></a></div>"
+		} else {
+			return "";
+		}
+	},
+	taskNameFormat:function(value, row, index) {
+		if(value){
+			
+			if(value !=''){
+				return value.join("<br/>");
+			}else{
+				return "已完成";
+			}
+			
+		}
+		return "";
+	},
+	
+	trackFlowFormat: function(value, row, index) {
+		var instanceid  = null;
+		if(row.processInstanceId){
+			instanceid = row.processInstanceId;
+		}
+		return "<div style='text-align:center;height:auto;'><span id='editRow' class='c_icon_genzong' title='查看跟踪' onclick='EvalProjectQuery.trackFlow("+instanceid+")' style='width:40px;'></span></div>";
+	},
+	
+	trackFlow:function(processInstanceId) {
+		//window.location.href = ctx+"/workspace/thirdeval/pems/thirdeval/comm/project/v0/trackDetail.vopx?processInstanceId=" + processInstanceId;
+		window.location.href = ctx+"/workflow/trackTask.do?processInstanceId=" + processInstanceId;
+	},
+	formatIsreturn:function(value,row,index){
+		if(value && value==1)
+			return "是";
+		return "否";
+	},
+	formatOper:function(value,row,index){
+		//
+		if(row.isOpen=="1"){
+			return "<span id='layWork' class='c_icon-diable' onclick='GridQuery.handlePage("+row.id+","+index+",0)' title='设置为不公开' style='float: left;margin-right: 10px;'></span>";
+		}else{
+			return "<span id='layWork' class='c_icon-able' onclick='GridQuery.handlePage("+row.id+","+index+",1)' title='设置为公开' style='float: left;margin-right: 10px;'></span>";
+		}
+	},
+	/**子页面可以重写点击事件方法*/
+	handlePage:function(rowId,index,flag){
+		var _this=this;
+		var grid = _this.$("#mainDatagrid").getWidget();
+		grid.selectRow(index);
+		//var selectedRow = grid.getSelected();
+		//window.location.href = ctx+"/taskoper/showTask/"+selectedRow.taskId+".do";
+		if(flag =="1"){
+			$.confirm("您确认要公开此项目吗?",function(r){
+				if(r){
+					$W.ajax.post(ctx+'/pems/hnnx/focalEvaluate/openProject.do',{id:rowId},function(data){
+		           		
+		           		grid.reload();
+		        	});
+				}
+			});
+		}
+		else{
+			$.confirm("您确认要不公开此项目吗?",function(r){
+			if(r){
+				$W.ajax.post(ctx+'/pems/hnnx/focalEvaluate/closeProject.do',{id:rowId},function(data){
+	           		grid.reload();
+	           		
+	        	});
+			}
+		});
+		}
+		
+	},
+	formatProjName:function(value,row,index){
+		return "<a href="+ctx+"/workspace/hnnxfocaleval/pems/hnnx/focaleval/common/projectQuery/v0/editPage.vopx?readonly=1&id="+row.id+">"+value+"</a>";
+	},
+	formatIsOpen:function(value,row,index){
+		if(value =="1"){
+			return "已公开";
+		}
+		else{
+			return "未公开";
+		}
+	}
+	
+}
