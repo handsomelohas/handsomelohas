@@ -9,6 +9,7 @@
 		}
 	},
 	//加入帮助按钮
+	dsdsdsds
 	getButtonData:function() {
 		return "[{text:'帮助',style:'help',click:'window.customListPage.help()'}]";
 	},
