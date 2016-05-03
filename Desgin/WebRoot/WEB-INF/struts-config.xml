@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+<struts-config>
+  <form-beans>
+  <form-bean name="usersForm" type="com.lhs.struts.form.UsersForm"/>
+  <form-bean name="employeeForm" type="com.lhs.struts.form.EmployeeForm"/>
+  <form-bean name="taskForm" type="com.lhs.struts.form.TaskForm"/>
+  <form-bean name="messageForm" type="com.lhs.struts.form.MessageForm"/>
+  </form-beans>
+  
+  <action-mappings>
+  <action path="/login" name="usersForm" parameter="flag">
+  <forward name="admin" path="/adminindex.jsp"/>
+  <forward name="ok" path="/managerindex.jsp"/>
+  <forward name="ok1" path="/employeeindex.jsp"/>
+  <forward name="err" path="/login.jsp"/>
+  
+  <forward name="gopwUi" path="/password.jsp"/>
+  <forward name="adderr1" path="/adderr1.jsp" />
+  <forward name="addok1" path="/addok1.jsp" />
+  
+  <forward name="gopwUi1" path="/password1.jsp"/>
+  <forward name="adderr2" path="/adderr2.jsp" />
+  <forward name="addok2" path="/addok2.jsp" />
+  
+  <forward name="gopwUi2" path="/password2.jsp"/>
+  <forward name="adderr3" path="/adderr3.jsp" />
+  <forward name="addok3" path="/addok3.jsp" />
+  </action>
+  <!-- employeeaction -->
+  <action path="/employee" name="usersForm" parameter="flag">
+  <forward name="goAddEmp" path="/addemployee.jsp"/>
+  <forward name="adderr1" path="/adderr1.jsp" />
+  <forward name="addok1" path="/addok1.jsp" />
+  <forward name="goShowEmp" path="/adminshowEmp.jsp" />
+  <forward name="goUpdateEmp" path="/adminupdateEmp.jsp"/>
+  <forward name="goShowEmp2" path="/managershowEmp.jsp"/>
+  <!-- 职工 -->
+  <forward name="goEmpUi" path="/employee.jsp"/>
+  </action> 
+  <!-- taskaction -->
+  <action path="/task" name="taskForm" parameter="flag">
+  <forward name="goAddTask" path="/addtask.jsp"/>
+  <forward name="adderr1" path="/adderr1.jsp" />
+  <forward name="addok1" path="/addok1.jsp" />
+  <forward name="adderr2" path="/adderr2.jsp" />
+  <forward name="addok2" path="/addok2.jsp" />
+  <forward name="adderr3" path="/adderr3.jsp" />
+  <forward name="addok3" path="/addok3.jsp" />
+  <forward name="goShowEmpTask" path="/showemployeetask.jsp"/>
+  <forward name="goShowTask" path="/adminshowtask.jsp"/>
+  <forward name="goUpdateTask" path="/adminupdateTask.jsp"/>
+  
+  <forward name="goST1Ui" path="/showTask.jsp"/>
+  <forward name="goFenTask" path="/managerfentask.jsp"/>
+  <forward name="goShowFenTask" path="/showfentask.jsp"/>
+  <forward name="goshowLookTask" path="/managerlooktask.jsp"/>
+  <forward name="goshowAudTask" path="/managershowaudtask.jsp"/>
+  <forward name="goManagerAudTask" path="/manageraudtask.jsp"/>
+  
+  <forward name="goshowEmpTask" path="/employeetask.jsp"/>
+  <forward name="goEmpTaskType" path="/empupdatetasktype.jsp"/>
+  <forward name="goEmpDeportTask" path="/empdeporttask.jsp"/>
+  <forward name="goshowSubmitTask" path="/empsubmittask.jsp"/>
+  <forward name="goEmpTaskPre" path="/employeeUpdatePre.jsp"/>
+  <forward name="goshowSubmitFinshTask" path="/employeeFinshTask.jsp"/>
+  <forward name="goshowEmpAudTask" path="/employeeaudtask.jsp"/>
+  </action>
+  
+  <action path="/message" name="messageForm" parameter="flag">
+  <forward name="goPublishMessage" path="/managerPublishMessage.jsp"/>
+  <forward name="addok2" path="/addok2.jsp"/>
+  <forward name="goShowEmpMessage" path="/employeeShowMessage.jsp"/>
+  <forward name="goReplyMessage" path="/employeeReplyMessage.jsp"/>
+  <forward name="goShowManMessage" path="/managerShowMessage.jsp"/>
+  <forward name="addok3" path="/addok3.jsp"/>
+  </action> 
+  </action-mappings>
+  <!-- 配置代理请求处理 DelegatingRequestProcessor-->
+  <controller>
+    <set-property property="processorClass" value="org.springframework.web.struts.DelegatingRequestProcessor"/>
+  </controller>
+</struts-config>
+

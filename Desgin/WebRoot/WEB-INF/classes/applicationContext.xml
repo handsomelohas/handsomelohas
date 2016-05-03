@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	
+		xmlns:p="http://www.springframework.org/schema/p"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:tx="http://www.springframework.org/schema/tx"	
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+		    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		    http://www.springframework.org/schema/context
+		    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		    http://www.springframework.org/schema/tx	    
+		    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	<!-- 启动注解扫描 -->
+	<context:annotation-config/>
+	<!-- 配置数据源 -->
+<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/mylohas"/>
+		<property name="username" value="root"/>
+		<property name="password" value="200869"/>			
+</bean>
+
+<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 接管hibernate对象映射文件 -->
+		<property name="mappingResources">
+		   <list>
+		     <value>com/lhs/domain/Task.hbm.xml</value>
+		     <value>com/lhs/domain/Users.hbm.xml</value>
+		     <value>com/lhs/domain/Message.hbm.xml</value>
+		   </list>
+		</property>
+		<property name="hibernateProperties">
+		   <value>
+		       hibernate.dialect=org.hibernate.dialect.MySQLDialect
+		       hibernate.hbm2ddl.auto=update
+		       hibernate.show_sql=true
+		   </value>
+		</property>
+</bean>
+
+<!-- loginService注解注入 -->
+<bean id="loginService" class="com.lhs.service.impl.LoginService"/>
+
+<!-- employeeService注解注入 -->
+<bean id="employeeService" class="com.lhs.service.impl.EmployeeService"/>
+
+<!-- messageService注解注入 -->
+<bean id="messageService" class="com.lhs.service.impl.MessageService"/>
+
+<!-- taskService注解注入 -->
+<bean id="taskService" class="com.lhs.service.impl.TaskService"/>
+<!-- action -->
+<!-- 注解注入 -->
+<bean name="/login" scope="prototype" class="com.lhs.struts.action.LoginAction"/>
+
+<bean name="/employee" scope="prototype" class="com.lhs.struts.action.EmployeeAction">
+  <property name="employeeService" ref="employeeService"/>
+</bean>
+
+<bean name="/task" scope="prototype" class="com.lhs.struts.action.TaskAction">
+  <property name="taskService" ref="taskService"/>
+</bean>
+
+<bean name="/message" scope="prototype" class="com.lhs.struts.action.MessageAtion">
+  <property name="messageService" ref="messageService"/>
+</bean>
+<!-- 配置事务管理器,统一管理sessionFactory事务 -->
+<bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+<!-- 启用事务注解 -->
+<tx:annotation-driven transaction-manager="txManager"/>
+</beans>
